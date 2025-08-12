@@ -1,151 +1,125 @@
-"""
-requests.exceptions
-~~~~~~~~~~~~~~~~~~~
 
-This module contains the set of Requests' exceptions.
-"""
-from urllib3.exceptions import HTTPError as BaseHTTPError
+from urllib3 .exceptions import HTTPError as BaseHTTPError 
 
-from .compat import JSONDecodeError as CompatJSONDecodeError
+from .compat import JSONDecodeError as CompatJSONDecodeError 
 
 
-class RequestException(IOError):
-    """There was an ambiguous exception that occurred while handling your
-    request.
-    """
+class RequestException (IOError ):
+    
 
-    def __init__(self, *args, **kwargs):
-        """Initialize RequestException with `request` and `response` objects."""
-        response = kwargs.pop("response", None)
-        self.response = response
-        self.request = kwargs.pop("request", None)
-        if response is not None and not self.request and hasattr(response, "request"):
-            self.request = self.response.request
-        super().__init__(*args, **kwargs)
+    def __init__ (self ,*args ,**kwargs ):
+        
+        response =kwargs .pop ("response",None )
+        self .response =response 
+        self .request =kwargs .pop ("request",None )
+        if response is not None and not self .request and hasattr (response ,"request"):
+            self .request =self .response .request 
+        super ().__init__ (*args ,**kwargs )
 
 
-class InvalidJSONError(RequestException):
-    """A JSON error occurred."""
+class InvalidJSONError (RequestException ):
+    pass
 
 
-class JSONDecodeError(InvalidJSONError, CompatJSONDecodeError):
-    """Couldn't decode the text into json"""
+class JSONDecodeError (InvalidJSONError ,CompatJSONDecodeError ):
+    
 
-    def __init__(self, *args, **kwargs):
-        """
-        Construct the JSONDecodeError instance first with all
-        args. Then use it's args to construct the IOError so that
-        the json specific args aren't used as IOError specific args
-        and the error message from JSONDecodeError is preserved.
-        """
-        CompatJSONDecodeError.__init__(self, *args)
-        InvalidJSONError.__init__(self, *self.args, **kwargs)
+    def __init__ (self ,*args ,**kwargs ):
+        
+        CompatJSONDecodeError .__init__ (self ,*args )
+        InvalidJSONError .__init__ (self ,*self .args ,**kwargs )
 
-    def __reduce__(self):
-        """
-        The __reduce__ method called when pickling the object must
-        be the one from the JSONDecodeError (be it json/simplejson)
-        as it expects all the arguments for instantiation, not just
-        one like the IOError, and the MRO would by default call the
-        __reduce__ method from the IOError due to the inheritance order.
-        """
-        return CompatJSONDecodeError.__reduce__(self)
+    def __reduce__ (self ):
+        
+        return CompatJSONDecodeError .__reduce__ (self )
 
 
-class HTTPError(RequestException):
-    """An HTTP error occurred."""
+class HTTPError (RequestException ):
+    pass
 
 
-class ConnectionError(RequestException):
-    """A Connection error occurred."""
+class ConnectionError (RequestException ):
+    pass
 
 
-class ProxyError(ConnectionError):
-    """A proxy error occurred."""
+class ProxyError (ConnectionError ):
+    pass
 
 
-class SSLError(ConnectionError):
-    """An SSL error occurred."""
+class SSLError (ConnectionError ):
+    pass
 
 
-class Timeout(RequestException):
-    """The request timed out.
-
-    Catching this error will catch both
-    :exc:`~requests.exceptions.ConnectTimeout` and
-    :exc:`~requests.exceptions.ReadTimeout` errors.
-    """
+class Timeout (RequestException ):
+    pass
 
 
-class ConnectTimeout(ConnectionError, Timeout):
-    """The request timed out while trying to connect to the remote server.
-
-    Requests that produced this error are safe to retry.
-    """
+class ConnectTimeout (ConnectionError ,Timeout ):
+    pass
 
 
-class ReadTimeout(Timeout):
-    """The server did not send any data in the allotted amount of time."""
+class ReadTimeout (Timeout ):
+    pass
 
 
-class URLRequired(RequestException):
-    """A valid URL is required to make a request."""
+class URLRequired (RequestException ):
+    pass
 
 
-class TooManyRedirects(RequestException):
-    """Too many redirects."""
+class TooManyRedirects (RequestException ):
+    pass
 
 
-class MissingSchema(RequestException, ValueError):
-    """The URL scheme (e.g. http or https) is missing."""
+class MissingSchema (RequestException ,ValueError ):
+    pass
 
 
-class InvalidSchema(RequestException, ValueError):
-    """The URL scheme provided is either invalid or unsupported."""
+class InvalidSchema (RequestException ,ValueError ):
+    pass
 
 
-class InvalidURL(RequestException, ValueError):
-    """The URL provided was somehow invalid."""
+class InvalidURL (RequestException ,ValueError ):
+    pass
 
 
-class InvalidHeader(RequestException, ValueError):
-    """The header value provided was somehow invalid."""
+class InvalidHeader (RequestException ,ValueError ):
+    pass
 
 
-class InvalidProxyURL(InvalidURL):
-    """The proxy URL provided is invalid."""
+class InvalidProxyURL (InvalidURL ):
+    pass
 
 
-class ChunkedEncodingError(RequestException):
-    """The server declared chunked encoding but sent an invalid chunk."""
+class ChunkedEncodingError (RequestException ):
+    pass
 
 
-class ContentDecodingError(RequestException, BaseHTTPError):
-    """Failed to decode response content."""
+class ContentDecodingError (RequestException ,BaseHTTPError ):
+    pass
 
 
-class StreamConsumedError(RequestException, TypeError):
-    """The content for this response was already consumed."""
+class StreamConsumedError (RequestException ,TypeError ):
+    pass
 
 
-class RetryError(RequestException):
-    """Custom retries logic failed"""
+class RetryError (RequestException ):
+    pass
 
 
-class UnrewindableBodyError(RequestException):
-    """Requests encountered an error when trying to rewind a body."""
+class UnrewindableBodyError (RequestException ):
+    pass
 
 
-# Warnings
 
 
-class RequestsWarning(Warning):
-    """Base warning for Requests."""
+
+class RequestsWarning (Warning ):
+    pass
 
 
-class FileModeWarning(RequestsWarning, DeprecationWarning):
-    """A file was opened in text mode, but Requests determined its binary length."""
+class FileModeWarning (RequestsWarning ,DeprecationWarning ):
+    pass
 
 
-class RequestsDependencyWarning(RequestsWarning):
-    """An imported dependency doesn't match the expected version range."""
+class RequestsDependencyWarning (RequestsWarning ):
+    pass
